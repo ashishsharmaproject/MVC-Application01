@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "RegistrationForm";
+}
+
+<h2>RegistrationForm</h2>
+<table>
+    <tr>
+        <td>Name:</td>
+        <td><input type="text" id="txtname" /></td>
+    </tr>
+
+    <tr>
+        <td>City:</td>
+        <td><input type="text" id="txtcity" /></td>
+    </tr>
+
+    <tr>
+        <td>Age:</td>
+        <td><input type="text" id="txtage" /></td>
+    </tr>
+
+    <tr>
+        <td></td>
+        <td><input type="button" id="btnsave" value="Save" onclick="Insert()"/></td>
+    </tr>
+</table>
+
+<table id="tbl" border="1" style="background-color:darkslategray;color:white;width:800px">
+    <tr style="background-color:red">
+        <th>Employee ID</th>
+        <th>Employee Name</th>
+        <th>City</th>
+        <th>Age</th>
+    </tr>
+</table>
+
+
+<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        Show();
+    });
+
+    function Insert() {
+        $.ajax({
+            url: 'UserRegistration/insert_oparation',
+            type: 'post',
+            data: { A: $("#txtname").val(), B: $("#txtcity").val(), C: $("#txtage").val() },
+            success: function () {
+                alert('Data Saved Successfully...!');
+                Show();
+            },
+            error: function () {
+                alert('Something went wrong. Data not Saved..!');
+            }
+        });
+    };
+
+    function Show() {
+        $.ajax({
+            url: 'UserRegistration/Display_oparation',
+            type: 'post',
+            data: {},
+            success: function (data) {
+                data = JSON.parse(data);
+                $("#tbl").find("tr:gt(0)").remove();
+                for (var i = 0; i < data.length; i++) {
+                    $("#tbl").append('<tr><td>' + data[i].uid + '</td> <td>' + data[i].name + '</td> <td>' + data[i].city + '</td> <td>' + data[i].age +'</td> <tr>')
+                }
+            },
+            error: function () {
+                alert('Something went wrong. Data not Found..!');
+            }
+        });
+    };
+
+</script>
