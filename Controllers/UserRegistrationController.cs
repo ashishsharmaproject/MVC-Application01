@@ -30,6 +30,16 @@ namespace MVC_Application01.Controllers
             con.Close();
         }
 
+        public void delete_oparation(int A)
+        {
+            con.Open();
+            SqlCommand cmd = new SqlCommand("user_delete", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@id", A);
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
 
         public JsonResult Display_oparation()
         {
