@@ -40,6 +40,33 @@ namespace MVC_Application01.Controllers
             con.Close();
         }
 
+        public JsonResult edit_oparation(int A)
+        {
+            con.Open();
+            SqlCommand cmd = new SqlCommand("user_edit", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@id", A);
+            SqlDataAdapter sda = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            sda.Fill(dt);
+            con.Close();
+            string data = JsonConvert.SerializeObject(dt);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        public void update_oparation(string A, string B, int C, int D)
+        {
+            con.Open();
+            SqlCommand cmd = new SqlCommand("user_update", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@name", A);
+            cmd.Parameters.AddWithValue("@city", B);
+            cmd.Parameters.AddWithValue("@age", C);
+            cmd.Parameters.AddWithValue("@uid", D);
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+
 
         public JsonResult Display_oparation()
         {

@@ -22,7 +22,8 @@
 
     <tr>
         <td></td>
-        <td><input type="button" id="btnsave" value="Save" onclick="checkvalid()"/></td>
+        <td><input type="button" id="btnsave" value="Save" style="background-color:red;color:white" onclick="validation()"/>
+            <input type="button" id="btnreset" value="Reset" style="background-color:blue;color:white" onclick="Reset()" /></td>
     </tr>
 </table>
 
@@ -32,6 +33,8 @@
         <th>Employee Name</th>
         <th>City</th>
         <th>Age</th>
+        <th></th>
+        <th></th>
     </tr>
 </table>
 
@@ -39,7 +42,7 @@
 <script src="~/Scripts/jquery-3.4.1.min.js"></script>
 <script type="text/javascript">
 
-    function checkvalid() {
+    function validation() {
         var validMsg = "";
         if ($("#txtname").val() == "") {
             validMsg += "Plaese Enter Name \n";
@@ -51,17 +54,38 @@
             validMsg += "Plaese Enter Age \n";
         }
         if (validMsg == "") {
-            Insert();
+            SAVE();
         }
         else {
             alert(validMsg);
         }
     }
 
+    //--------------------------------------------Validation End-----------------------------------------
+
+    var idbox = 0;
+
+
+    function Reset() {
+        $("#txtname").val("");
+        $("#txtcity").val("");
+        $("#txtage").val("");
+        $("#btnsave").val("Save");
+        idbox = 0;
+    }
 
     $(document).ready(function () {
         Show();
     });
+
+    function SAVE() {
+        if ($("#btnsave").val() == "Save") {
+            Insert();
+        }
+        else if ($("#btnsave").val() == "Update"){
+            Update();
+        }
+    }
 
     function Insert() {
         $.ajax({
@@ -71,9 +95,27 @@
             success: function () {
                 alert('Data Saved Successfully...!');
                 Show();
+                Reset();
             },
             error: function () {
                 alert('Something went wrong. Data not Saved..!');
+            }
+        });
+    };
+
+    function Update() {
+        $.ajax({
+            url: 'UserRegistration/update_oparation',
+            type: 'post',
+            data: { D: idbox, A: $("#txtname").val(), B: $("#txtcity").val(), C: $("#txtage").val() },
+            success: function () {
+                alert('Data Updated Successfully...!');
+                $("#btnsave").val("Save");
+                Show();
+                Reset();
+            },
+            error: function () {
+                alert('Something went wrong. Data can\'t Update..!');
             }
         });
     };
@@ -93,6 +135,25 @@
         });
     };
 
+    function EDIT(uid) {
+        $.ajax({
+            url: 'UserRegistration/edit_oparation',
+            type: 'post',
+            data: { A: uid },
+            success: function (data) {
+                data = JSON.parse(data);
+                $("#txtname").val(data[0].name);
+                $("#txtcity").val(data[0].city);
+                $("#txtage").val(data[0].age);
+                $("#btnsave").val("Update");
+                idbox = uid;
+            },
+            error: function () {
+                alert('Something went wrong. Data can\'t Edit..!');
+            }
+        });
+    };
+
     
 
     function Show() {
@@ -104,7 +165,7 @@
                 data = JSON.parse(data);
                 $("#tbl").find("tr:gt(0)").remove();
                 for (var i = 0; i < data.length; i++) {
-                    $("#tbl").append('<tr><td>' + data[i].uid + '</td> <td>' + data[i].name + '</td> <td>' + data[i].city + '</td> <td>' + data[i].age + '</td> <td><input type="button" id="btndelete" value="Delete" onclick="DELETE(' + data[i].uid + ')"/></td> <tr>')
+                    $("#tbl").append('<tr><td>' + data[i].uid + '</td> <td>' + data[i].name + '</td> <td>' + data[i].city + '</td> <td>' + data[i].age + '</td> <td><input type="button" id="btndelete" value="Delete" onclick="DELETE(' + data[i].uid + ')"/></td> <td><input type="button" id="btnedit" value="Edit" onclick="EDIT(' + data[i].uid + ')"/></td> <tr>')
                 }
             },
             error: function () {
