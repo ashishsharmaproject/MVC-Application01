@@ -21,6 +21,24 @@
     </tr>
 
     <tr>
+        <td>Country:</td>
+        <td>
+            <select id="txtcountry" onchange="Showstate()">
+                <option value="0">--Select--</option>
+            </select>
+        </td>
+    </tr>
+
+    <tr>
+        <td>State:</td>
+        <td>
+            <select id="txtstate">
+                <option value="0">--Select--</option>
+            </select>
+        </td>
+    </tr>
+
+    <tr>
         <td></td>
         <td>
             <input type="button" id="btnsave" value="Save" style="background-color:red;color:white" onclick="validation()" />
@@ -29,12 +47,14 @@
     </tr>
 </table>
 
-<table id="tbl" border="1" style="background-color:darkslategray;color:white;width:800px">
+<table id="tbl" border="1" style="background-color:darkslategray;color:white;width:1000px">
     <tr style="background-color:red">
         <th>Employee ID</th>
         <th>Employee Name</th>
         <th>City</th>
         <th>Age</th>
+        <th>Country</th>
+        <th>State</th>
         <th></th>
         <th></th>
     </tr>
@@ -72,12 +92,15 @@
         $("#txtname").val("");
         $("#txtcity").val("");
         $("#txtage").val("");
+        $("#txtcountry").val("0");
+        $("#txtstate").val("0");
         $("#btnsave").val("Save");
         idbox = 0;
     }
 
     $(document).ready(function () {
         Show();
+        Showcountry();
     });
 
     function SAVE() {
@@ -93,7 +116,7 @@
         $.ajax({
             url: 'UserRegistration/insert_oparation',
             type: 'post',
-            data: { Name: $("#txtname").val(), City: $("#txtcity").val(), Age: $("#txtage").val() },
+            data: { Name: $("#txtname").val(), City: $("#txtcity").val(), Age: $("#txtage").val(), country: $("#txtcountry").val(), state: $("#txtstate").val() },
             success: function () {
                 alert('Data Saved Successfully...!');
                 Show();
@@ -102,14 +125,14 @@
             error: function () {
                 alert('Something went wrong. Data not Saved..!');
             }
-        });
+        }); 
     };
 
     function Update() {
         $.ajax({
             url: 'UserRegistration/update_oparation',
             type: 'post',
-            data: { UID: idbox, Name: $("#txtname").val(), City: $("#txtcity").val(), Age: $("#txtage").val() },
+            data: { UID: idbox, Name: $("#txtname").val(), City: $("#txtcity").val(), Age: $("#txtage").val(), Country: $("#txtcountry").val(), State: $("#txtstate").val() },
             success: function () {
                 alert('Data Updated Successfully...!');
                 $("#btnsave").val("Save");
@@ -144,11 +167,15 @@
             url: 'UserRegistration/edit_oparation',
             type: 'post',
             data: { UID: uid },
+            async: false,
             success: function (data) {
                 data = JSON.parse(data);
                 $("#txtname").val(data[0].name);
                 $("#txtcity").val(data[0].city);
                 $("#txtage").val(data[0].age);
+                $("#txtcountry").val(data[0].country);
+                Showstate();
+                $("#txtstate").val(data[0].state);
                 $("#btnsave").val("Update");
                 idbox = uid;
             },
@@ -169,7 +196,7 @@
                 data = JSON.parse(data);
                 $("#tbl").find("tr:gt(0)").remove();
                 for (var i = 0; i < data.length; i++) {
-                    $("#tbl").append('<tr><td>' + data[i].uid + '</td> <td>' + data[i].name + '</td> <td>' + data[i].city + '</td> <td>' + data[i].age + '</td> <td><input type="button" id="btndelete" value="Delete" onclick="DELETE(' + data[i].uid + ')"/></td> <td><input type="button" id="btnedit" value="Edit" onclick="EDIT(' + data[i].uid + ')"/></td> <tr>')
+                    $("#tbl").append('<tr><td>' + data[i].uid + '</td> <td>' + data[i].name + '</td> <td>' + data[i].city + '</td> <td>' + data[i].age + '</td> <td>' + data[i].cname + '</td> <td>' + data[i].sname + '</td> <td><input type="button" id="btndelete" value="Delete" onclick="DELETE(' + data[i].uid + ')"/></td> <td><input type="button" id="btnedit" value="Edit" onclick="EDIT(' + data[i].uid + ')"/></td> <tr>')
                 }
             },
             error: function () {
@@ -177,5 +204,42 @@
             }
         });
     };
+
+    function Showcountry() {
+        $.ajax({
+            url: 'UserRegistration/country_Show',
+            type: 'post',
+            data: {},
+            success: function (data) {
+                data = JSON.parse(data);
+                for (var i = 0; i < data.length; i++) {
+                    $("#txtcountry").append($("<option></option>").html(data[i].cname).val(data[i].cid));
+                }
+            },
+            error: function () {
+                alert("Country Data not Found..");
+            }
+        });
+    }
+
+    function Showstate() {
+        $.ajax({
+            url: 'UserRegistration/state_Show',
+            type: 'post',
+            data: { cid: $("#txtcountry").val() },
+            async: false,
+            success: function (data) {
+                data = JSON.parse(data);
+                $("#txtstate").empty();
+                $("#txtstate").append($("<option></option>").html("--Select--").val(0));
+                for (var i = 0; i < data.length; i++) {
+                    $("#txtstate").append($("<option></option>").html(data[i].sname).val(data[i].sid));
+                }
+            },
+            error: function () {
+                alert("State Data not Found..");
+            }
+        });
+    }
 
 </script>

@@ -28,6 +28,8 @@ namespace MVC_Application01.Controllers
             cmd.Parameters.AddWithValue("@name", obj.Name);
             cmd.Parameters.AddWithValue("@city", obj.City);
             cmd.Parameters.AddWithValue("@age", obj.Age);
+            cmd.Parameters.AddWithValue("@country", obj.country);
+            cmd.Parameters.AddWithValue("@state", obj.state);
             cmd.ExecuteNonQuery();
             con.Close();
         }
@@ -65,11 +67,40 @@ namespace MVC_Application01.Controllers
             cmd.Parameters.AddWithValue("@name", obj.Name);
             cmd.Parameters.AddWithValue("@city", obj.City);
             cmd.Parameters.AddWithValue("@age", obj.Age);
+            cmd.Parameters.AddWithValue("@country", obj.country);
+            cmd.Parameters.AddWithValue("@state", obj.state);
             cmd.Parameters.AddWithValue("@uid", obj.UID);
             cmd.ExecuteNonQuery();
             con.Close();
         }
 
+        // Binding and Show Functions-----------------------------------------------------------
+        public JsonResult country_Show()
+        {
+            con.Open();
+            SqlCommand cmd = new SqlCommand("form_country", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            SqlDataAdapter sda = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            sda.Fill(dt);
+            con.Close();
+            string data = JsonConvert.SerializeObject(dt);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult state_Show(UserRegistrationModel obj)
+        {
+            con.Open();
+            SqlCommand cmd = new SqlCommand("form_state", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@cid", obj.cid);
+            SqlDataAdapter sda = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            sda.Fill(dt);
+            con.Close();
+            string data = JsonConvert.SerializeObject(dt);
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }
 
         public JsonResult Display_oparation()
         {
