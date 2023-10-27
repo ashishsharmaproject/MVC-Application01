@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using System.Data.SqlClient;
 using System.Data;
 using Newtonsoft.Json;
+using MVC_Application01.Models;
+using System.Web.UI.WebControls;
 
 namespace MVC_Application01.Controllers
 {
@@ -18,34 +20,34 @@ namespace MVC_Application01.Controllers
             return View();
         }
 
-        public void insert_oparation(string A, string B, int C)
+        public void insert_oparation(UserRegistrationModel obj)
         {
             con.Open();
             SqlCommand cmd = new SqlCommand("user_insert", con);
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@name", A);
-            cmd.Parameters.AddWithValue("@city", B);
-            cmd.Parameters.AddWithValue("@age", C);
+            cmd.Parameters.AddWithValue("@name", obj.Name);
+            cmd.Parameters.AddWithValue("@city", obj.City);
+            cmd.Parameters.AddWithValue("@age", obj.Age);
             cmd.ExecuteNonQuery();
             con.Close();
         }
 
-        public void delete_oparation(int A)
+        public void delete_oparation(UserRegistrationModel obj)
         {
             con.Open();
             SqlCommand cmd = new SqlCommand("user_delete", con);
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@id", A);
+            cmd.Parameters.AddWithValue("@id", obj.UID);
             cmd.ExecuteNonQuery();
             con.Close();
         }
 
-        public JsonResult edit_oparation(int A)
+        public JsonResult edit_oparation(UserRegistrationModel obj)
         {
             con.Open();
             SqlCommand cmd = new SqlCommand("user_edit", con);
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@id", A);
+            cmd.Parameters.AddWithValue("@id", obj.UID);
             SqlDataAdapter sda = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
             sda.Fill(dt);
@@ -54,15 +56,16 @@ namespace MVC_Application01.Controllers
             return Json(data, JsonRequestBehavior.AllowGet);
         }
 
-        public void update_oparation(string A, string B, int C, int D)
+        public void update_oparation(UserRegistrationModel obj)
         {
             con.Open();
             SqlCommand cmd = new SqlCommand("user_update", con);
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@name", A);
-            cmd.Parameters.AddWithValue("@city", B);
-            cmd.Parameters.AddWithValue("@age", C);
-            cmd.Parameters.AddWithValue("@uid", D);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@name", obj.Name);
+            cmd.Parameters.AddWithValue("@city", obj.City);
+            cmd.Parameters.AddWithValue("@age", obj.Age);
+            cmd.Parameters.AddWithValue("@uid", obj.UID);
             cmd.ExecuteNonQuery();
             con.Close();
         }

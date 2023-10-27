@@ -91,7 +91,7 @@
         $.ajax({
             url: 'UserRegistration/insert_oparation',
             type: 'post',
-            data: { A: $("#txtname").val(), B: $("#txtcity").val(), C: $("#txtage").val() },
+            data: { Name: $("#txtname").val(), City: $("#txtcity").val(), Age: $("#txtage").val() },
             success: function () {
                 alert('Data Saved Successfully...!');
                 Show();
@@ -107,7 +107,7 @@
         $.ajax({
             url: 'UserRegistration/update_oparation',
             type: 'post',
-            data: { D: idbox, A: $("#txtname").val(), B: $("#txtcity").val(), C: $("#txtage").val() },
+            data: { UID: idbox, Name: $("#txtname").val(), City: $("#txtcity").val(), Age: $("#txtage").val() },
             success: function () {
                 alert('Data Updated Successfully...!');
                 $("#btnsave").val("Save");
@@ -121,25 +121,27 @@
     };
 
     function DELETE(uid) {
-        $.ajax({
-            url: 'UserRegistration/delete_oparation',
-            type: 'post',
-            data: { A: uid },
-            success: function () {
-                alert('Data Deleted Successfully...!');
-                Show();
-            },
-            error: function () {
-                alert('Something went wrong. Data can\'t Delete..!');
-            }
-        });
+        if (confirm("Are you sure you want to delete this record..?")) {
+            $.ajax({
+                url: 'UserRegistration/delete_oparation',
+                type: 'post',
+                data: { UID: uid },
+                success: function () {
+                    alert('Data Deleted Successfully...!');
+                    Show();
+                },
+                error: function () {
+                    alert('Something went wrong. Data can\'t Delete..!');
+                }
+            });
+        }
     };
 
     function EDIT(uid) {
         $.ajax({
             url: 'UserRegistration/edit_oparation',
             type: 'post',
-            data: { A: uid },
+            data: { UID: uid },
             success: function (data) {
                 data = JSON.parse(data);
                 $("#txtname").val(data[0].name);
