@@ -81,7 +81,7 @@ namespace MVC_Application01.Controllers
             sda.Fill(dt);
             con.Close();
             string data = JsonConvert.SerializeObject(dt);
-            return Json(data,JsonRequestBehavior.AllowGet);
+            return Json(data, JsonRequestBehavior.AllowGet);
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 @{
     ViewBag.Title = "RegistrationForm";
 }
@@ -22,8 +22,10 @@
 
     <tr>
         <td></td>
-        <td><input type="button" id="btnsave" value="Save" style="background-color:red;color:white" onclick="validation()"/>
-            <input type="button" id="btnreset" value="Reset" style="background-color:blue;color:white" onclick="Reset()" /></td>
+        <td>
+            <input type="button" id="btnsave" value="Save" style="background-color:red;color:white" onclick="validation()" />
+            <input type="button" id="btnreset" value="Reset" style="background-color:blue;color:white" onclick="Reset()" />
+        </td>
     </tr>
 </table>
 
@@ -82,7 +84,7 @@
         if ($("#btnsave").val() == "Save") {
             Insert();
         }
-        else if ($("#btnsave").val() == "Update"){
+        else if ($("#btnsave").val() == "Update") {
             Update();
         }
     }
@@ -156,7 +158,7 @@
         });
     };
 
-    
+
 
     function Show() {
         $.ajax({
