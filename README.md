@@ -7,7 +7,7 @@
 
 <b>Controller (C# and JavaScript/AJAX):</b> The Controller acts as an intermediary that orchestrates the interaction between the Model and the View. In C#, it receives and processes user requests, triggers CRUD operations in the Model, and updates the View with the retrieved data. Additionally, JavaScript and AJAX (Asynchronous JavaScript and XML) are used to make asynchronous requests to the server, allowing for smooth and responsive user interactions without full page reloads.</p>
 
-<h4>Key features and operations in this MVC ADO.NET application include:<h4>
+<h2>Key features and operations in this MVC ADO.NET application include:<h2>
 <li>Create: Users can input data through HTML forms, and the Controller processes this data, invoking C# methods to add records to the database.</li>
 <li>Read: The View displays data fetched from the Model, showing users the information they seek. JavaScript and jQuery can enhance the user experience with dynamic filtering and pagination.</li>
 <li>Update: Users can modify existing data through the View, and the Controller manages these updates by invoking the appropriate C# methods to modify records in the database.</li>
